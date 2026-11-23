@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizarra Digital - Ciencias Sociales 6.º Primaria Unidad 1 | Colegio Montano</title>
+    <!-- Carga de Tailwind CSS para utilidades responsivas y estructura -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Variables de Identidad Visual - Colegio Montano */
+        :root {
+            --azul-principal: #1269A8;
+            --amarillo-brillante: #F7D615;
+            --verde-grisaceo: #54887D;
+            --azul-claro: #88B5C7;
+            --verde-oliva: #A6B046;
+            --blanco-suave: #F2F5E9;
+            --texto-oscuro: #1e293b;
+        }
+
+        /* Tipografía Institucional */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            color: var(--texto-oscuro);
+            margin: 0;
+            padding: 12px;
+        }
+
+        /* Marco de Pizarra Digital */
+        .pizarra-frame {
+            background-color: var(--blanco-suave);
+            border: 5px solid var(--amarillo-brillante);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(18, 105, 168, 0.25);
+            overflow: hidden;
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 90vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Ajuste en Modo Pantalla Completa */
+        :fullscreen .pizarra-frame {
+            max-width: 100%;
+            height: 100vh;
+            border-radius: 0;
+            border-width: 4px;
+        }
+
+        /* Encabezado de la Pizarra */
+        .pizarra-header {
+            background: linear-gradient(135deg, var(--azul-principal) 0%, #0d4f80 100%);
+            color: white;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Botón Pantalla Completa */
+        .btn-fullscreen {
+            background-color: var(--amarillo-brillante);
+            color: var(--azul-principal);
+            font-weight: 700;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-fullscreen:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #ffe02e;
+        }
+
+        /* Navegación de Pestañas Horizontales */
+        .nav-tabs {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--azul-claro);
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .tab-btn {
+            padding: 14px 18px;
+            font-weight: 700;
+            color: var(--verde-grisaceo);
+            border-bottom: 4px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--blanco-suave);
+            color: var(--azul-principal);
+        }
+
+        .tab-btn.active {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            border-bottom: 4px solid var(--amarillo-brillante);
+        }
+
+        /* Tarjetas y Contenedores Pedagógicos */
+        .card-montano {
+            background-color: #ffffff;
+            border-left: 5px solid var(--verde-grisaceo);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .card-montano:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-ejercicio {
+            background-color: rgba(136, 181, 199, 0.22);
+            border: 1px solid var(--azul-claro);
+            border-radius: 10px;
+        }
+
+        /* Etiquetas de Nivel y Categoría */
+        .badge-oliva {
+            background-color: var(--verde-oliva);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-azul {
+            background-color: var(--azul-principal);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+        }
+
+        .badge-amarillo {
+            background-color: var(--amarillo-brillante);
+            color: var(--azul-principal);
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+        }
+
+        /* Botón Mostrar / Ocultar Solución */
+        .btn-solucion {
+            background-color: var(--azul-principal);
+            color: white;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-solucion:hover {
+            background-color: var(--verde-grisaceo);
+        }
+
+        .caja-solucion {
+            background-color: #ffffff;
+            border-left: 4px solid var(--verde-oliva);
+            border-radius: 8px;
+            margin-top: 12px;
+            padding: 14px;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .caja-solucion.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Animación de secciones */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MARCO PRINCIPAL DE PIZARRA DIGITAL -->
+    <div id="pizarra" class="pizarra-frame">
+        
+        <!-- ENCABEZADO INSTITUCIONAL -->
+        <header class="pizarra-header p-4 md:p-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <!-- Logo y Títulos -->
+                <div class="flex items-center gap-4">
+                    <div class="bg-white p-2 rounded-xl shadow-md shrink-0">
+                        <img 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyEop0yf6lZ7Jk9MILZxF1rBj4Oqs5esyhIQ&s" 
+                            alt="Logo Colegio Montano" 
+                            class="h-14 w-14 md:h-16 md:w-16 object-contain"
+                            onerror="this.src='https://placehold.co/80x80/1269A8/F7D615?text=CM'"
+                        >
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="badge-amarillo">COLEGIO MONTANO</span>
+                            <span class="text-xs md:text-sm font-semibold text-blue-100 bg-white/10 px-2.5 py-0.5 rounded-full">
+                                📅 18 de Enero al 5 de Marzo (7 Semanas)
+                            </span>
+                        </div>
+                        <h1 class="text-xl md:text-2xl lg:text-3xl font-bold tracking-tight text-white">
+                            Ciencias Sociales — Unidad 1: Misión 1
+                        </h1>
+                        <p class="text-sm md:text-base text-blue-100 mt-0.5">
+                            <strong>Grado:</strong> Sexto Primaria ("A" y "B") &nbsp;|&nbsp; <strong>Docente:</strong> Stephany Godoy &nbsp;|&nbsp; <strong>Zona Total:</strong> 100 Pts (4 Módulos × 25 Pts)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Botón Pantalla Completa -->
+                <button id="btnFullscreen" onclick="toggleFullscreen()" class="btn-fullscreen px-4 py-2.5 text-sm md:text-base self-end md:self-center shrink-0 flex items-center gap-2">
+                    <span id="fsIcon">⛶</span>
+                    <span id="fsText">Pantalla completa</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MENÚ DE PESTAÑAS HORIZONTALES INTERACTIVAS -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="tab-btn active" onclick="openTab(event, 'teoria')">
+                <span>🌍</span> Teoría y Dosificación (4 Módulos)
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'ejemplos')">
+                <span>💡</span> Ejemplos Resueltos (15)
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'ejercicios')">
+                <span>✍️</span> Ejercicios Prácticos (15)
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'reflexion')">
+                <span>🧠</span> Reflexión Crítica
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'evaluacion')">
+                <span>✅</span> Evaluación Formativa
+            </button>
+        </nav>
+
+        <!-- CONTENIDO DEL LIENZO DE TRABAJO -->
+        <main class="p-4 md:p-8 flex-1 overflow-y-auto">
+
+            <!-- ===================================================================== -->
+            <!-- SECCIÓN 1: EXPLICACIÓN TEÓRICA Y DOSIFICACIÓN DE LOS 4 MÓDULOS        -->
+            <!-- ===================================================================== -->
+            <section id="teoria" class="tab-content active space-y-8">
+                
+                <!-- Banner Resumen de Misión 1 -->
+                <div class="bg-white p-5 rounded-xl border-2 border-[#54887D] shadow-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200 pb-4 mb-4">
+                        <div>
+                            <span class="badge-oliva mb-1 inline-block">Misión 1: La humanidad a través del tiempo y el espacio (Págs. 12–65)</span>
+                            <h2 class="text-xl md:text-2xl font-bold text-[#1269A8]">Planificación Didáctica y Dosificación de Evaluación</h2>
+                            <p class="text-sm text-gray-600 mt-1">
+                                <strong>Competencia de Unidad:</strong> Analiza la organización de las sociedades y explica procesos históricos y geográficos fundamentales, relacionándolos con la realidad guatemalteca y con la diversidad cultural del mundo.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 shrink-0">
+                            <span class="badge-azul">4 Módulos</span>
+                            <span class="badge-oliva">25 Pts c/u</span>
+                            <span class="badge-amarillo">Total: 100 Pts</span>
+                        </div>
+                    </div>
+
+                    <!-- Leyenda de Modalidades de Trabajo -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs font-semibold text-center">
+                        <div class="p-2 rounded-lg bg-blue-50 text-[#1269A8] border border-blue-200">👤 Trabajo Individual</div>
+                        <div class="p-2 rounded-lg bg-teal-50 text-[#54887D] border border-teal-200">👥 Trabajo en Equipo</div>
+                        <div class="p-2 rounded-lg bg-amber-50 text-amber-800 border border-amber-200">🚀 Proyecto</div>
+                        <div class="p-2 rounded-lg bg-lime-50 text-lime-800 border border-lime-300">🏆 Logro / Integrado</div>
+                        <div class="p-2 rounded-lg bg-purple-50 text-purple-800 border border-purple-200">🔄 Retroalimentación</div>
+                    </div>
+                </div>
+
+                <!-- GRID DE LOS 4 MÓDULOS (25 PTS CADA UNO) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    <!-- MÓDULO 1 -->
+                    <div class="card-montano p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="badge-azul">MÓDULO 1 • Semanas 1 y 2 (18 Ene - 29 Ene)</span>
+                                <span class="badge-amarillo">25 Puntos</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#1269A8] mb-2">Sociedad, Estado Democrático e Historia Humana</h3>
+                            <p class="text-sm text-gray-700 mb-4 bg-[#F2F5E9] p-3 rounded-lg">
+                                <strong>Contenidos (Sem. 1 y 2):</strong> Una sociedad organizada; sociedad, Estado y gobierno; Estado guatemalteco e instituciones democráticas; valoración y respeto a la diversidad; la historia y sus ciencias auxiliares; edades históricas y áreas culturales del mundo; surgimiento de las primeras civilizaciones.
+                            </p>
+                            
+                            <!-- Tabla de Actividades Módulo 1 -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1269A8] text-white">
+                                            <th class="p-2 rounded-tl-lg">Actividad</th>
+                                            <th class="p-2">Modalidad</th>
+                                            <th class="p-2 text-right rounded-tr-lg">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="p-2 font-medium">1. Organizador gráfico tridimensional: Sociedad, Estado y Gobierno</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#1269A8]">👤 Individual</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">2. Análisis de casos: Instituciones democráticas de Guatemala</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#54887D]">👥 Equipo</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">3. Línea del tiempo ilustrada de las Edades Históricas y ciencias auxiliares</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-lime-700">🏆 Logro</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">4. Mural de la diversidad: Áreas culturales del mundo y primeras civilizaciones</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-amber-700">🚀 Proyecto</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr class="bg-purple-50">
+                                            <td class="p-2 font-bold text-purple-900">5. Clínica de Retroalimentación: Rutina de pensamiento y repaso</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-purple-800">🔄 Retroalim.</span></td>
+                                            <td class="p-2 text-right font-bold text-purple-900">3 pts</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-bold text-[#54887D]">
+                            <span>Subtotal Módulo 1:</span>
+                            <span>25 / 25 Puntos</span>
+                        </div>
+                    </div>
+
+                    <!-- MÓDULO 2 -->
+                    <div class="card-montano p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="badge-azul">MÓDULO 2 • Semanas 3 y 4 (01 Feb - 12 Feb)</span>
+                                <span class="badge-amarillo">25 Puntos</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#1269A8] mb-2">Civilizaciones Antiguas de Oriente Medio y Lejano Oriente</h3>
+                            <p class="text-sm text-gray-700 mb-4 bg-[#F2F5E9] p-3 rounded-lg">
+                                <strong>Contenidos (Sem. 3 y 4):</strong> Primeras culturas en Egipto; Civilización Mesopotámica; otras culturas de Oriente Medio (fenicios, persas y hebreos); culturas del Lejano Oriente (China antigua y antigua India).
+                            </p>
+                            
+                            <!-- Tabla de Actividades Módulo 2 -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1269A8] text-white">
+                                            <th class="p-2 rounded-tl-lg">Actividad</th>
+                                            <th class="p-2">Modalidad</th>
+                                            <th class="p-2 text-right rounded-tr-lg">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="p-2 font-medium">1. Ficha comparativa ilustrada: Egipto y Mesopotamia (ríos y escritura)</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#1269A8]">👤 Individual</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">2. Mapa histórico de rutas comerciales: Fenicios, persas y hebreos</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#54887D]">👥 Equipo</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">3. Matriz de legados científicos y sociales de China e India antiguas</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-lime-700">🏆 Integrado</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">4. Museo Vivo del Mundo Antiguo: Maqueta o artefacto histórico</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-amber-700">🚀 Proyecto</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr class="bg-purple-50">
+                                            <td class="p-2 font-bold text-purple-900">5. Clínica de Retroalimentación: Trivia de aportes culturales</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-purple-800">🔄 Retroalim.</span></td>
+                                            <td class="p-2 text-right font-bold text-purple-900">3 pts</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-bold text-[#54887D]">
+                            <span>Subtotal Módulo 2:</span>
+                            <span>25 / 25 Puntos</span>
+                        </div>
+                    </div>
+
+                    <!-- MÓDULO 3 -->
+                    <div class="card-montano p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="badge-azul">MÓDULO 3 • Semanas 5 y 6 (15 Feb - 26 Feb)</span>
+                                <span class="badge-amarillo">25 Puntos</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#1269A8] mb-2">Cartografía Mundial y Geografía Física y Humana de Europa</h3>
+                            <p class="text-sm text-gray-700 mb-4 bg-[#F2F5E9] p-3 rounded-lg">
+                                <strong>Contenidos (Sem. 5 y 6):</strong> Explora tus emociones (el medidor emocional); mapas y coordenadas; geografía del mundo; Europa; ríos y relieve europeo; litoral, clima, vegetación y fauna; población europea y sus problemas.
+                            </p>
+                            
+                            <!-- Tabla de Actividades Módulo 3 -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1269A8] text-white">
+                                            <th class="p-2 rounded-tl-lg">Actividad</th>
+                                            <th class="p-2">Modalidad</th>
+                                            <th class="p-2 text-right rounded-tr-lg">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="p-2 font-medium">1. Taller de coordenadas geográficas (latitud y longitud) + medidor emocional</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#1269A8]">👤 Individual</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">2. Mapa físico en relieve: Ríos, penínsulas y cordilleras de Europa</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#54887D]">👥 Equipo</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">3. Cuadro relacional: Clima, biomas y distribución de la población europea</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-lime-700">🏆 Logro</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">4. Noticiero Geográfico: Retos demográficos de Europa (envejecimiento y migración)</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-amber-700">🚀 Proyecto</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr class="bg-purple-50">
+                                            <td class="p-2 font-bold text-purple-900">5. Clínica de Retroalimentación: Desafío interactivo de mapas</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-purple-800">🔄 Retroalim.</span></td>
+                                            <td class="p-2 text-right font-bold text-purple-900">3 pts</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-bold text-[#54887D]">
+                            <span>Subtotal Módulo 3:</span>
+                            <span>25 / 25 Puntos</span>
+                        </div>
+                    </div>
+
+                    <!-- MÓDULO 4 -->
+                    <div class="card-montano p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="badge-azul">MÓDULO 4 • Semana 7 (01 Mar - 05 Mar)</span>
+                                <span class="badge-amarillo">25 Puntos</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-[#1269A8] mb-2">Ciudadanía Global, Investigación Social y Cierre de Misión</h3>
+                            <p class="text-sm text-gray-700 mb-4 bg-[#F2F5E9] p-3 rounded-lg">
+                                <strong>Contenidos (Sem. 7):</strong> Organismos internacionales; participación ciudadana; investigación científica y su objeto de estudio; Tras las huellas… Sara Curruchich; Pulso Nova; Evaluación y Diario del astronauta.
+                            </p>
+                            
+                            <!-- Tabla de Actividades Módulo 4 -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#1269A8] text-white">
+                                            <th class="p-2 rounded-tl-lg">Actividad</th>
+                                            <th class="p-2">Modalidad</th>
+                                            <th class="p-2 text-right rounded-tr-lg">Pts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="p-2 font-medium">1. Biografía reflexiva: "Tras las huellas de Sara Curruchich" e identidad cultural</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#1269A8]">👤 Individual</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">2. Directorio ilustrado de Organismos Internacionales (ONU, OEA, UNESCO)</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-[#54887D]">👥 Equipo</span></td>
+                                            <td class="p-2 text-right font-bold">5 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">3. Mini-proyecto de investigación social y participación ciudadana escolar</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-amber-700">🚀 Proyecto</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">4. Pulso Nova: Evaluación integradora de Misión 1</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-lime-700">🏆 Integrado</span></td>
+                                            <td class="p-2 text-right font-bold">6 pts</td>
+                                        </tr>
+                                        <tr class="bg-purple-50">
+                                            <td class="p-2 font-bold text-purple-900">5. Clínica de Retroalimentación: Diario del astronauta (metacognición)</td>
+                                            <td class="p-2"><span class="text-xs font-bold text-purple-800">🔄 Retroalim.</span></td>
+                                            <td class="p-2 text-right font-bold text-purple-900">3 pts</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-gray-200 flex justify-between items-center text-sm font-bold text-[#54887D]">
+                            <span>Subtotal Módulo 4:</span>
+                            <span>25 / 25 Puntos</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- SÍNTESIS TEÓRICA DE LOS TEMAS DE LA UNIDAD -->
+                <div class="bg-white p-6 rounded-xl border border-[#88B5C7] shadow-sm space-y-4">
+                    <h3 class="text-xl font-bold text-[#1269A8] border-b-2 border-[#F7D615] pb-2">
+                        📚 Síntesis Conceptual de la Misión 1 (Sexto Primaria)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm leading-relaxed">
+                        <div class="p-3 bg-[#F2F5E9] rounded-lg">
+                            <h4 class="font-bold text-[#54887D]">1. Sociedad, Estado, Gobierno e Historia</h4>
+                            <p>La <strong>sociedad</strong> es el conjunto de personas que conviven bajo normas comunes; el <strong>Estado</strong> es la nación jurídicamente organizada (población, territorio y soberanía); el <strong>gobierno</strong> administra el Estado mediante tres poderes (Ejecutivo, Legislativo y Judicial). La <strong>Historia</strong> estudia el pasado humano apoyada por ciencias auxiliares como la Arqueología, Geografía y Cronología.</p>
+                        </div>
+                        <div class="p-3 bg-[#F2F5E9] rounded-lg">
+                            <h4 class="font-bold text-[#54887D]">2. Primeras Civilizaciones Fluviales y Orientales</h4>
+                            <p>Las primeras grandes civilizaciones surgieron junto a ríos fértiles: <strong>Egipto</strong> (río Nilo, jeroglíficos, pirámides), <strong>Mesopotamia</strong> (ríos Tigris y Éufrates, escritura cuneiforme, Código de Hammurabi), <strong>India</strong> (río Indo, sistema decimal) y <strong>China</strong> (río Amarillo, papel, brújula, imprenta). En Oriente Medio destacaron <strong>fenicios</strong> (alfabeto fonético y comercio marítimo), <strong>persas</strong> y <strong>hebreos</strong> (monoteísmo).</p>
+                        </div>
+                        <div class="p-3 bg-[#F2F5E9] rounded-lg">
+                            <h4 class="font-bold text-[#54887D]">3. Cartografía y Geografía de Europa</h4>
+                            <p>Las <strong>coordenadas geográficas</strong> (latitud y longitud) permiten ubicar cualquier punto en la Tierra. <strong>Europa</strong> es una gran península con relieve variado (Alpes, Pirineos, llanura europea), ríos navegables (Danubio, Rin, Volga), clima mayormente templado y una población densa que enfrenta retos como el envejecimiento demográfico y los flujos migratorios.</p>
+                        </div>
+                        <div class="p-3 bg-[#F2F5E9] rounded-lg">
+                            <h4 class="font-bold text-[#54887D]">4. Organismos Internacionales y Participación Ciudadana</h4>
+                            <p>Los <strong>organismos internacionales</strong> (ONU, OEA, UNICEF) promueven la paz, la cooperación y los derechos humanos. La <strong>participación ciudadana</strong> permite incidir democráticamente en la comunidad, valorando referentes culturales guatemaltecos como <strong>Sara Curruchich</strong> e impulsando la <strong>investigación científica</strong> para resolver problemas sociales.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECCIÓN 2: EJEMPLOS RESUELTOS (5 BÁSICO, 5 INTERMEDIO, 5 AVANZADO)    -->
+            <!-- ===================================================================== -->
+            <section id="ejemplos" class="tab-content space-y-8">
+                <div class="bg-white p-5 rounded-xl border-l-4 border-[#1269A8]">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Ejemplos Resueltos Paso a Paso</h2>
+                    <p class="text-sm text-gray-600">15 modelos desarrollados progresivamente para dominar los contenidos de Sexto Primaria.</p>
+                </div>
+
+                <!-- NIVEL BÁSICO -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="badge-oliva">Nivel Básico</span>
+                        <h3 class="text-lg font-bold text-[#54887D]">Conceptos Fundamentales y Ubicación Inicial</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Básico 1 • Sociedad, Estado y Gobierno</span>
+                            <p class="font-semibold mt-1">¿Cuál es la diferencia principal entre <strong>Estado</strong> y <strong>Gobierno</strong>?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> El <strong>Estado</strong> es permanente (incluye territorio, población, leyes e instituciones), mientras que el <strong>Gobierno</strong> es temporal y está formado por las autoridades elegidas cada cuatro años para administrar el Estado.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Básico 2 • Ciencias Auxiliares de la Historia</span>
+                            <p class="font-semibold mt-1">¿Qué ciencia auxiliar de la Historia excava y estudia restos materiales antiguos como vasijas, templos y herramientas?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> La <strong>Arqueología</strong>, ya que reconstruye la vida de las civilizaciones antiguas a partir de sus vestigios físicos.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Básico 3 • Civilizaciones Fluviales</span>
+                            <p class="font-semibold mt-1">Relaciona cada civilización antigua con su río principal: <strong>Egipto, Mesopotamia, India y China</strong>.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> Egipto (<em>Río Nilo</em>) | Mesopotamia (<em>Ríos Tigris y Éufrates</em>) | India (<em>Río Indo</em>) | China (<em>Río Huang-Ho o Amarillo</em>).
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Básico 4 • Coordenadas Geográficas</span>
+                            <p class="font-semibold mt-1">¿Qué líneas imaginarias miden la <strong>latitud</strong> y cuál es su línea base de 0°?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> Los <strong>paralelos</strong> miden la latitud (Norte o Sur) y su línea de referencia de 0° es el <strong>Ecuador terrestre</strong>.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4 md:col-span-2">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Básico 5 • Relieve e Hidrografía de Europa</span>
+                            <p class="font-semibold mt-1">Menciona la cordillera más alta de Europa Occidental y el río más largo del continente europeo.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> La cordillera de los <strong>Alpes</strong> (donde destaca el Mont Blanc) y el río <strong>Volga</strong> (el más largo y caudaloso de Europa, ubicado en Rusia).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL INTERMEDIO -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="badge-azul">Nivel Intermedio</span>
+                        <h3 class="text-lg font-bold text-[#54887D]">Análisis Comparativo y Relaciones Geográfico-Históricas</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#54887D]">Ejemplo Intermedio 1 • Culturas de Oriente Medio</span>
+                            <p class="font-semibold mt-1">Compara el principal aporte cultural de los <strong>fenicios</strong> frente al de los <strong>hebreos</strong>.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> Los <strong>fenicios</strong> fueron grandes navegantes del Mediterráneo que crearon un <em>alfabeto fonético de 22 consonantes</em> (base de los alfabetos actuales); los <strong>hebreos</strong> legaron la primera religión <em>monoteísta</em> organizada (el judaísmo).
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#54887D]">Ejemplo Intermedio 2 • Edades Históricas</span>
+                            <p class="font-semibold mt-1">¿Qué acontecimiento marca el fin de la <strong>Prehistoria</strong> y el inicio de la <strong>Edad Antigua</strong>?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> La <strong>invención de la escritura</strong> (alrededor del 3500 a. C. en Mesopotamia y Egipto), pues permitió dejar registros escritos directos de las sociedades.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#54887D]">Ejemplo Intermedio 3 • Demografía Europea</span>
+                            <p class="font-semibold mt-1">Explica por qué muchos países de Europa presentan hoy una pirámide poblacional invertida (envejecimiento).</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> Se debe a la combinación de dos factores: una <strong>baja tasa de natalidad</strong> (nacen pocos niños) y una <strong>alta esperanza de vida</strong> gracias a sus sistemas avanzados de salud y bienestar.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#54887D]">Ejemplo Intermedio 4 • Instituciones Democráticas en Guatemala</span>
+                            <p class="font-semibold mt-1">¿Qué institución garantiza la pureza y transparencia de las elecciones democráticas en Guatemala?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> El <strong>Tribunal Supremo Electoral (TSE)</strong>, máxima autoridad en materia electoral que organiza los comicios y resguarda el voto ciudadano.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4 md:col-span-2">
+                            <span class="text-xs font-bold text-[#54887D]">Ejemplo Intermedio 5 • Identidad y Diversidad Cultural (Sara Curruchich)</span>
+                            <p class="font-semibold mt-1">¿Por qué la trayectoria artística de la cantautora maya kaqchikel <strong>Sara Curruchich</strong> se estudia dentro de la valoración de la diversidad cultural?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-2.5 rounded">
+                                <strong>Resolución:</strong> Porque dignifica los idiomas originarios de Guatemala (cantando en kaqchikel y español), visibiliza los derechos de los pueblos indígenas y promueve el respeto intercultural a nivel mundial.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NIVEL AVANZADO -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="badge-amarillo">Nivel Avanzado</span>
+                        <h3 class="text-lg font-bold text-[#54887D]">Síntesis Multidimensional y Pensamiento Crítico</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Avanzado 1 • Relación Geografía - Civilización Antigua</span>
+                            <p class="font-semibold mt-1">Analiza cómo las condiciones geográficas de <strong>Egipto</strong> y <strong>Mesopotamia</strong> influyeron en su organización política y arquitectónica.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-3 rounded">
+                                <strong>Resolución Integral:</strong> En <strong>Egipto</strong>, las crecidas predecibles del Nilo y la protección natural de los desiertos favorecieron un gobierno centralizado y estable (los faraones) con monumentos de piedra perdurables (pirámides). En <strong>Mesopotamia</strong>, al ser una llanura abierta sin barreras naturales y con ríos de crecidas irregulares, surgieron ciudades-Estado amuralladas que competían entre sí y construían con ladrillo de adobe (zigurats).
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Avanzado 2 • Relieve, Clima y Economía en Europa</span>
+                            <p class="font-semibold mt-1">Explica cómo la forma recortada del <strong>litoral europeo</strong> (penínsulas, golfos, mares interiores y puertos naturales) impulsó el desarrollo económico e histórico de Europa.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-3 rounded">
+                                <strong>Resolución Integral:</strong> Al tener miles de kilómetros de costas navegables y ríos caudalosos que desembocan en mares accesibles (Mediterráneo, Mar del Norte, Báltico), los pueblos europeos desarrollaron tempranamente la navegación, el comercio marítimo internacional y el intercambio cultural entre regiones.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Avanzado 3 • Legados de China e India en la Vida Cotidiana Actual</span>
+                            <p class="font-semibold mt-1">Demuestra con tres ejemplos concretos cómo un estudiante de Sexto Primaria utiliza hoy inventos o conocimientos originados en la <strong>China</strong> y la <strong>India</strong> antiguas.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-3 rounded">
+                                <strong>Resolución Integral:</strong> 1) Al escribir en cuadernos utiliza el <strong>papel</strong> (inventado en China por Cai Lun); 2) Al resolver operaciones matemáticas usa los <strong>números arábigos y el concepto del cero</strong> (desarrollados en la India antigua); 3) Al orientarse con GPS o mapas digitales emplea principios heredados de la <strong>brújula magnética</strong> (inventada en China).
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Avanzado 4 • Investigación Científica y Participación Ciudadana</span>
+                            <p class="font-semibold mt-1">Plantea cómo aplicarías los pasos de la <strong>investigación científica en Ciencias Sociales</strong> para proponer una solución al problema de la basura en tu municipio.</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-3 rounded">
+                                <strong>Resolución Integral:</strong> 1) <em>Observación y problema:</em> Identificar puntos críticos de acumulación de desechos. 2) <em>Hipótesis:</em> La falta de recolección clasificada aumenta la contaminación. 3) <em>Recolección de datos:</em> Encuestar vecinos y consultar normativas municipales. 4) <em>Acción ciudadana:</em> Presentar un informe formal ante el Consejo Comunitario de Desarrollo (COCODE) proponiendo jornadas de reciclaje.
+                            </p>
+                        </div>
+
+                        <div class="card-montano p-4">
+                            <span class="text-xs font-bold text-[#1269A8]">Ejemplo Avanzado 5 • Cooperación Internacional y Democracia</span>
+                            <p class="font-semibold mt-1">¿Por qué Guatemala participa en organismos como la <strong>ONU</strong> y la <strong>UNESCO</strong>, y cómo beneficia esto al patrimonio cultural y natural del país?</p>
+                            <p class="text-sm text-gray-700 mt-2 bg-[#F2F5E9] p-3 rounded">
+                                <strong>Resolución Integral:</strong> La cooperación internacional permite recibir apoyo técnico, financiamiento y reconocimiento mundial para proteger sitios declarados Patrimonio de la Humanidad (como Tikal, Antigua Guatemala y Quiriguá), además de fortalecer el cumplimiento de los derechos humanos y los Objetivos de Desarrollo Sostenible.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECCIÓN 3: EJERCICIOS PRÁCTICOS (15 EJERCICIOS PARA EL ESTUDIANTE)    -->
+            <!-- ===================================================================== -->
+            <section id="ejercicios" class="tab-content space-y-8">
+                <div class="bg-white p-5 rounded-xl border-l-4 border-[#54887D] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-2xl font-bold text-[#1269A8]">Taller de Ejercicios Prácticos</h2>
+                        <p class="text-sm text-gray-600">Resuelve cada actividad en tu cuaderno o pizarra y comprueba tus respuestas paso a paso.</p>
+                    </div>
+                    <span class="badge-oliva">15 Ejercicios Graduados</span>
+                </div>
+
+                <!-- BLOQUE BÁSICO (1 - 5) -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#1269A8] border-b border-gray-300 pb-1">🟢 Nivel Básico (Ejercicios 1 al 5)</h3>
+                    
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 1 (Poderes del Estado Guatemalteco):</p>
+                        <p class="text-sm mt-1">Menciona los <strong>tres organismos o poderes del Estado</strong> de Guatemala y la función básica de cada uno.</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p1', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p1" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> 1) <em>Organismo Legislativo (Congreso):</em> Crea y reforma las leyes. 2) <em>Organismo Ejecutivo (Presidente y Ministros):</em> Administra el país y ejecuta las políticas públicas. 3) <em>Organismo Judicial (Cortes y Juzgados):</em> Imparte justicia y vela por el cumplimiento de la ley.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 2 (Escrituras Antiguas):</p>
+                        <p class="text-sm mt-1">¿Qué nombre recibió la escritura desarrollada en <strong>Mesopotamia</strong> sobre tablillas de arcilla y cuál fue la de <strong>Egipto</strong>?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p2', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p2" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> En Mesopotamia se desarrolló la escritura <strong>cuneiforme</strong> (en forma de cuña) y en Egipto la escritura <strong>jeroglífica</strong>.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 3 (Coordenadas Geográficas):</p>
+                        <p class="text-sm mt-1">¿Cuál es el meridiano de referencia de 0° que divide la Tierra en hemisferio Oriental y Occidental?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p3', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p3" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> El <strong>Meridiano de Greenwich</strong> (Meridiano 0°).
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 4 (Penínsulas de Europa):</p>
+                        <p class="text-sm mt-1">Menciona <strong>tres penínsulas</strong> importantes del continente europeo.</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p4', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p4" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> Península Ibérica (España y Portugal), Península Itálica (Italia), Península Balcánica (Grecia) y Península Escandinava (Noruega y Suecia).
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 5 (Organismos Internacionales):</p>
+                        <p class="text-sm mt-1">¿Qué significan las siglas <strong>ONU</strong> y <strong>OEA</strong>?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p5', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p5" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> <strong>ONU:</strong> Organización de las Naciones Unidas. <strong>OEA:</strong> Organización de los Estados Americanos.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOQUE INTERMEDIO (6 - 10) -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#1269A8] border-b border-gray-300 pb-1">🟡 Nivel Intermedio (Ejercicios 6 al 10)</h3>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 6 (Código de Hammurabi):</p>
+                        <p class="text-sm mt-1">¿A qué civilización perteneció el rey <strong>Hammurabi</strong> y por qué su código de leyes fue un hito histórico para la humanidad?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p6', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p6" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> Perteneció al Imperio Babilónico en <strong>Mesopotamia</strong>. Fue un hito porque fue uno de los primeros conjuntos de leyes escritas y expuestas públicamente para regular la justicia y la convivencia.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 7 (Culturas del Lejano Oriente):</p>
+                        <p class="text-sm mt-1">Identifica si los siguientes aportes corresponden a la <strong>China antigua</strong> o a la <strong>antigua India</strong>: a) Seda y pólvora &nbsp;|&nbsp; b) Sistema de castas y yoga &nbsp;|&nbsp; c) Gran Muralla &nbsp;|&nbsp; d) Ajedrez y número cero.</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p7', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p7" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> a) China antigua | b) Antigua India | c) China antigua | d) Antigua India.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 8 (Ríos de Europa):</p>
+                        <p class="text-sm mt-1">¿Qué importante río europeo nace en la Selva Negra (Alemania), atraviesa 10 países (como Austria, Hungría y Serbia) y desemboca en el Mar Negro?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p8', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p8" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> El <strong>Río Danubio</strong> (el segundo río más largo de Europa y vía fluvial clave de Europa Central y Oriental).
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 9 (Clima y Vegetación de Europa):</p>
+                        <p class="text-sm mt-1">Diferencia entre el <strong>clima mediterráneo</strong> (sur de Europa) y el <strong>clima polar/subártico</strong> (extremo norte de Europa).</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p9', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p9" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> El <em>clima mediterráneo</em> tiene veranos calurosos y secos e inviernos suaves (vegetación de olivos, encinas y matorral). El <em>clima polar/subártico</em> presenta inviernos extremadamente fríos y largos con vegetación de tundra y taiga (bosques de coníferas).
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 10 (Investigación Científica):</p>
+                        <p class="text-sm mt-1">¿Cuál es el <strong>objeto de estudio</strong> de la investigación científica en Ciencias Sociales?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p10', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p10" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> El ser humano en su dimensión social, cultural, histórica, económica y política, analizando sus interacciones, instituciones y problemáticas para comprender y mejorar la realidad.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOQUE AVANZADO (11 - 15) -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-[#1269A8] border-b border-gray-300 pb-1">🔴 Nivel Avanzado (Ejercicios 11 al 15)</h3>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 11 (Lectura de Coordenadas):</p>
+                        <p class="text-sm mt-1">La ciudad de Madrid (España) se ubica aproximadamente a <strong>40° Latitud Norte, 3° Longitud Oeste</strong>. Explica en qué hemisferios se encuentra respecto al Ecuador y al Meridiano de Greenwich.</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p11', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p11" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> Al tener 40° Latitud Norte, se encuentra en el <strong>Hemisferio Norte</strong> (al norte del Ecuador); al tener 3° Longitud Oeste, se ubica en el <strong>Hemisferio Occidental</strong> (al oeste del Meridiano de Greenwich).
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 12 (Comparación de Imperios Orientales):</p>
+                        <p class="text-sm mt-1">¿Qué estrategia administrativa utilizaron los <strong>persas</strong> (como Ciro el Grande y Darío I) para gobernar un imperio tan extenso sin destruir las costumbres de los pueblos conquistados?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p12', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p12" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> Dividieron el imperio en provincias llamadas <strong>satrapías</strong> gobernadas por sátrapas, construyeron una extensa red de caminos reales para la comunicación rápida y practicaron la <strong>tolerancia religiosa y cultural</strong> hacia los pueblos sometidos.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 13 (Problemas de la Población Europea):</p>
+                        <p class="text-sm mt-1">Analiza dos consecuencias económicas que enfrenta un país europeo cuando su población adulta mayor supera ampliamente a la población joven en edad de trabajar.</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p13', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p13" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> 1) <em>Escasez de mano de obra joven</em> para sostener la producción y los servicios; 2) <em>Mayor gasto público en pensiones y atención médica</em> para adultos mayores, lo que lleva a muchos países a recibir población migrante joven.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 14 (Participación Ciudadana en Guatemala):</p>
+                        <p class="text-sm mt-1">¿De qué manera un niño o niña de Sexto Primaria puede ejercer la <strong>participación ciudadana</strong> aunque todavía no tenga 18 años para votar en elecciones nacionales?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p14', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p14" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> Participando en el gobierno escolar, proponiendo proyectos ambientales o solidarios en su barrio, respetando las normas de convivencia, informándose críticamente y defendiendo los derechos de la niñez.
+                        </div>
+                    </div>
+
+                    <div class="card-ejercicio p-4">
+                        <p class="font-bold text-[#1269A8]">Ejercicio 15 (Síntesis Histórica - Áreas Culturales):</p>
+                        <p class="text-sm mt-1">¿Por qué las primeras civilizaciones del mundo (Egipto, Mesopotamia, India, China y posteriormente Mesoamérica) desarrollaron calendarios astronómicos tan precisos?</p>
+                        <button class="btn-solucion mt-3 text-xs" onclick="toggleSolucion('sol-6p15', this)">👁️ Mostrar solución</button>
+                        <div id="sol-6p15" class="caja-solucion text-sm">
+                            <strong>Solución:</strong> Porque su supervivencia dependía de la <strong>agricultura</strong>; necesitaban predecir con exactitud las estaciones de lluvia, sequía y crecidas de los ríos para planificar las épocas de siembra y cosecha.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECCIÓN 4: PREGUNTAS DE REFLEXIÓN CRÍTICA                             -->
+            <!-- ===================================================================== -->
+            <section id="reflexion" class="tab-content space-y-6">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-[#F7D615] shadow-sm">
+                    <h2 class="text-2xl font-bold text-[#1269A8]">Preguntas de Reflexión Crítica y Pensamiento Lógico</h2>
+                    <p class="text-sm text-gray-600 mt-1">Cuestionamientos abiertos para análisis en clase, plenaria o en el <em>Diario del Astronauta</em>.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card-montano p-5 space-y-3">
+                        <span class="badge-azul">1. Democracia y Ciudadanía</span>
+                        <h3 class="text-lg font-bold text-[#1269A8]">¿Basta con votar cada cuatro años para tener democracia?</h3>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            En la Semana 1 estudiamos que una sociedad organizada requiere instituciones democráticas y participación ciudadana. Reflexiona: ¿Qué ocurre en un país cuando los ciudadanos solo votan, pero luego se desentienden de lo que pasa en su escuela, comunidad o municipio?
+                        </p>
+                    </div>
+
+                    <div class="card-montano p-5 space-y-3">
+                        <span class="badge-oliva">2. Herencia de las Civilizaciones</span>
+                        <h3 class="text-lg font-bold text-[#1269A8]">El valor de la escritura en la historia humana</h3>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            Tanto en Mesopotamia como en Egipto y China, la escritura transformó la organización social, las leyes y la ciencia. ¿Cómo imaginas que sería nuestra sociedad actual si nunca se hubiera inventado un sistema para registrar el conocimiento por escrito?
+                        </p>
+                    </div>
+
+                    <div class="card-montano p-5 space-y-3">
+                        <span class="badge-azul">3. Diversidad e Interculturalidad</span>
+                        <h3 class="text-lg font-bold text-[#1269A8]">El mensaje de Sara Curruchich para Guatemala</h3>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            Guatemala es un país multilingüe y pluricultural. ¿Por qué respetar y valorar los idiomas mayas, garífuna y xinka fortalece nuestra identidad nacional en lugar de dividirnos?
+                        </p>
+                    </div>
+
+                    <div class="card-montano p-5 space-y-3">
+                        <span class="badge-oliva">4. Geografía Humana Comparada</span>
+                        <h3 class="text-lg font-bold text-[#1269A8]">Contrastes demográficos: Europa vs. Guatemala</h3>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            Mientras Europa tiene una población mayoritariamente adulta y anciana, Guatemala posee una de las poblaciones más jóvenes de América. ¿Qué oportunidades y responsabilidades tienen ustedes, como niños y jóvenes guatemaltecos, para transformar el futuro del país?
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- SECCIÓN 5: EVALUACIÓN FORMATIVA CON SOLUCIONES OCULTAS                 -->
+            <!-- ===================================================================== -->
+            <section id="evaluacion" class="tab-content space-y-6">
+                <div class="bg-white p-5 rounded-xl border-2 border-[#1269A8] flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-[#1269A8]">Evaluación Formativa — Pulso Nova (Misión 1)</h2>
+                        <p class="text-sm text-gray-600">Comprueba tus aprendizajes de las 7 semanas desplegando la solución paso a paso en cada problema.</p>
+                    </div>
+                    <span class="badge-amarillo">5 Reactivos Integradores</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- REACTIVO 1 -->
+                    <div class="card-ejercicio p-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="badge-azul">Reactivo 1 • Organización del Estado y Democracia</span>
+                            <span class="text-xs font-bold text-[#54887D]">Valor sugerido: 20%</span>
+                        </div>
+                        <p class="font-semibold text-gray-800">Lee la situación y responde: En una comunidad se necesita construir un puente peatonal urgente. (a) ¿Por qué la comunidad es parte de la <em>sociedad</em>? (b) ¿A qué institución del <em>Estado guatemalteco</em> (Municipalidad o Tribunal Supremo Electoral) deben acudir para gestionar la obra pública?</p>
+                        <button class="btn-solucion mt-2 text-sm" onclick="toggleSolucion('sol-6peval1', this)">
+                            👁️ Mostrar solución
+                        </button>
+                        <div id="sol-6peval1" class="caja-solucion text-sm space-y-1">
+                            <p><strong>Paso 1 (Sociedad):</strong> Porque es un grupo organizado de ciudadanos que comparten un espacio territorial, intereses comunes y buscan el bien colectivo.</p>
+                            <p><strong>Paso 2 (Institución):</strong> Deben acudir a la <strong>Municipalidad</strong> (gobierno local autónomo encargado de los servicios e infraestructura comunitaria, a través de su Concejo Municipal y los COCODE).</p>
+                        </div>
+                    </div>
+
+                    <!-- REACTIVO 2 -->
+                    <div class="card-ejercicio p-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="badge-azul">Reactivo 2 • Civilizaciones de Oriente Medio y Lejano Oriente</span>
+                            <span class="text-xs font-bold text-[#54887D]">Valor sugerido: 20%</span>
+                        </div>
+                        <p class="font-semibold text-gray-800">Identifica a qué civilización antigua corresponde cada pista histórica: <br>1) Construyeron pirámides como tumbas reales y momificaron a sus gobernantes. <br>2) Inventaron la brújula, el papel y la imprenta de bloques. <br>3) Fueron expertos navegantes mediterráneos que difundieron el alfabeto fonético.</p>
+                        <button class="btn-solucion mt-2 text-sm" onclick="toggleSolucion('sol-6peval2', this)">
+                            👁️ Mostrar solución
+                        </button>
+                        <div id="sol-6peval2" class="caja-solucion text-sm space-y-1">
+                            <p><strong>1)</strong> <strong>Civilización Egipcia</strong> (valle del río Nilo).</p>
+                            <p><strong>2)</strong> <strong>Civilización China Antigua</strong> (Lejano Oriente).</p>
+                            <p><strong>3)</strong> <strong>Civilización Fenicia</strong> (costas del Mediterráneo oriental).</p>
+                        </div>
+                    </div>
+
+                    <!-- REACTIVO 3 -->
+                    <div class="card-ejercicio p-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="badge-azul">Reactivo 3 • Geografía Física y Humana de Europa</span>
+                            <span class="text-xs font-bold text-[#54887D]">Valor sugerido: 20%</span>
+                        </div>
+                        <p class="font-semibold text-gray-800">Un barco comercial zarpa desde el puerto de Róterdam (Países Bajos) navegando río arriba por el <strong>Río Rin</strong> hacia el centro de Europa. (a) ¿En qué mar desemboca el río Rin? (b) ¿Por qué los ríos europeos son tan importantes para el transporte y la economía?</p>
+                        <button class="btn-solucion mt-2 text-sm" onclick="toggleSolucion('sol-6peval3', this)">
+                            👁️ Mostrar solución
+                        </button>
+                        <div id="sol-6peval3" class="caja-solucion text-sm space-y-1">
+                            <p><strong>Paso 1 (Desembocadura):</strong> El río Rin desemboca en el <strong>Mar del Norte</strong>.</p>
+                            <p><strong>Paso 2 (Importancia económica):</strong> Porque atraviesan llanuras extensas con caudal regular todo el año, lo que los convierte en verdaderas "autopistas fluviales" navegables que conectan industrias y ciudades interiores con los puertos marítimos.</p>
+                        </div>
+                    </div>
+
+                    <!-- REACTIVO 4 -->
+                    <div class="card-ejercicio p-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="badge-azul">Reactivo 4 • Coordenadas Geográficas</span>
+                            <span class="text-xs font-bold text-[#54887D]">Valor sugerido: 20%</span>
+                        </div>
+                        <p class="font-semibold text-gray-800">Explica la diferencia entre <strong>Latitud</strong> y <strong>Longitud</strong>, indicando cuál es el valor máximo en grados de cada una.</p>
+                        <button class="btn-solucion mt-2 text-sm" onclick="toggleSolucion('sol-6peval4', this)">
+                            👁️ Mostrar solución
+                        </button>
+                        <div id="sol-6peval4" class="caja-solucion text-sm space-y-1">
+                            <p><strong>Latitud:</strong> Es la distancia angular desde cualquier punto de la Tierra hasta el <strong>Ecuador (0°)</strong>. Puede ser Norte o Sur y su valor máximo es <strong>90°</strong> (en los polos).</p>
+                            <p><strong>Longitud:</strong> Es la distancia angular desde cualquier punto hasta el <strong>Meridiano de Greenwich (0°)</strong>. Puede ser Este u Oeste y su valor máximo es <strong>180°</strong>.</p>
+                        </div>
+                    </div>
+
+                    <!-- REACTIVO 5 -->
+                    <div class="card-ejercicio p-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="badge-azul">Reactivo 5 • Investigación Social e Interculturalidad</span>
+                            <span class="text-xs font-bold text-[#54887D]">Valor sugerido: 20%</span>
+                        </div>
+                        <p class="font-semibold text-gray-800">En la Semana 7 (Módulo 4), tu equipo investiga cómo preservar las tradiciones culturales de tu comunidad. Menciona: (a) Dos fuentes de información válidas para tu investigación social y (b) Una acción concreta para difundir los resultados en el colegio.</p>
+                        <button class="btn-solucion mt-2 text-sm" onclick="toggleSolucion('sol-6peval5', this)">
+                            👁️ Mostrar solución
+                        </button>
+                        <div id="sol-6peval5" class="caja-solucion text-sm space-y-1">
+                            <p><strong>a) Fuentes válidas:</strong> Entrevistas orales a abuelos o líderes comunitarios (fuente primaria) y libros o archivos históricos de la Casa de la Cultura o Ministerio de Cultura y Deportes (fuente documental).</p>
+                            <p><strong>b) Acción de difusión:</strong> Organizar una exposición cultural interactiva, mural informativo o cápsula audiovisual presentando los hallazgos a los demás grados.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- PIE DE PIZARRA INSTITUCIONAL -->
+        <footer class="bg-white border-t border-gray-200 px-6 py-3 text-xs text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span><strong>Colegio Montano</strong> • Plataforma Educativa Canvas</span>
+            <span>Docente: Stephany Godoy • Ciencias Sociales — Sexto Primaria (Unidad 1)</span>
+        </footer>
+
+    </div>
+
+    <!-- LÓGICA INTERACTIVA (PESTAÑAS, SOLUCIONES Y FULLSCREEN API) -->
+    <script>
+        /**
+         * Cambia dinámicamente entre las pestañas horizontales de la pizarra.
+         * @param {Event} evt - Evento de clic del botón.
+         * @param {string} tabId - ID de la sección a mostrar.
+         */
+        function openTab(evt, tabId) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            const tabButtons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        /**
+         * Alterna la visibilidad de las cajas de solución paso a paso.
+         * @param {string} idSolucion - ID del contenedor de la solución.
+         * @param {HTMLElement} btn - Botón presionado para actualizar su etiqueta.
+         */
+        function toggleSolucion(idSolucion, btn) {
+            const caja = document.getElementById(idSolucion);
+            const estaVisible = caja.classList.contains("visible");
+
+            if (estaVisible) {
+                caja.classList.remove("visible");
+                btn.innerHTML = "👁️ Mostrar solución";
+                btn.style.backgroundColor = "#1269A8";
+            } else {
+                caja.classList.add("visible");
+                btn.innerHTML = "🙈 Ocultar solución";
+                btn.style.backgroundColor = "#54887D";
+            }
+        }
+
+        /**
+         * Activa o desactiva el modo pantalla completa usando Fullscreen API.
+         */
+        function toggleFullscreen() {
+            const fsText = document.getElementById("fsText");
+            const fsIcon = document.getElementById("fsIcon");
+
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    fsText.textContent = "Salir de pantalla completa";
+                    fsIcon.textContent = "✖";
+                }).catch((err) => {
+                    console.warn("No se pudo activar pantalla completa:", err.message);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        fsText.textContent = "Pantalla completa";
+                        fsIcon.textContent = "⛶";
+                    });
+                }
+            }
+        }
+
+        // Sincronizar texto del botón si el usuario sale con la tecla ESC
+        document.addEventListener("fullscreenchange", () => {
+            const fsText = document.getElementById("fsText");
+            const fsIcon = document.getElementById("fsIcon");
+            if (!document.fullscreenElement) {
+                fsText.textContent = "Pantalla completa";
+                fsIcon.textContent = "⛶";
+            }
+        });
+    </script>
+</body>
+</html>
